@@ -152,20 +152,30 @@ class BrowseScreenState extends State<BrowseScreen> {
       return;
     }
 
-    final saved = SavedCharacter.fromCharacter(
-      character: character,
-      note: note,
-    );
-    await widget.database.insertSavedCharacter(saved);
-    await _refreshSavedIds();
-    widget.onFavoriteSaved();
+    try {
+      final saved = SavedCharacter.fromCharacter(
+        character: character,
+        note: note,
+      );
+      await widget.database.insertSavedCharacter(saved);
+      await _refreshSavedIds();
+      widget.onFavoriteSaved();
 
-    if (!mounted) return;
+      if (!mounted) return;
 
-    setState(() {});
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('${character.name} saved to favorites')),
-    );
+      setState(() {});
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('${character.name} saved to favorites')),
+      );
+    } catch (_) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Could not save favorite. Please try again.'),
+        ),
+      );
+    }
   }
 
   Future<String?> _promptForNote(String characterName) async {
@@ -199,7 +209,7 @@ class BrowseScreenState extends State<BrowseScreen> {
     );
 
     controller.dispose();
-    return result ?? '';
+    return result;
   }
 
   @override
