@@ -44,6 +44,12 @@ flutter pub get
 flutter run
 ```
 
+**Chrome / web:** use a fixed port so saved favorites persist between runs (browser storage is tied to the port):
+
+```bash
+flutter run -d chrome --web-port=8080
+```
+
 3. Choose a connected device or simulator when prompted.
 
 **Android:** `INTERNET` permission is already declared in `android/app/src/main/AndroidManifest.xml`.
@@ -54,8 +60,8 @@ flutter run
 2. Tap **Browse all characters** (or search for a name).
 3. Tap the bookmark icon on at least 5 characters and save them.
 4. Open **Favorites** and confirm they appear.
-5. Fully close/kill the app (swipe away from recents).
-6. Reopen the app → **Favorites** should still list your saved characters.
+5. Fully close/kill the app (swipe away from recents, or close the Chrome tab).
+6. Reopen the app using the **same port** (`--web-port=8080` on Chrome) → **Favorites** should still list your saved characters.
 7. Delete one item, then use **Clear all** to wipe the list.
 
 ## Edge cases handled

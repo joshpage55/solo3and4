@@ -21,6 +21,11 @@ class DatabaseHelper {
     return _database!;
   }
 
+  /// Ensures the database (and web worker) is ready before the UI loads.
+  Future<void> ensureInitialized() async {
+    await database;
+  }
+
   Future<Database> _initDatabase() async {
     final path = kIsWeb
         ? _databaseName

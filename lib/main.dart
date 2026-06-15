@@ -9,11 +9,12 @@ import 'services/database_helper.dart';
 import 'services/preferences_service.dart';
 import 'services/rick_morty_api.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (kIsWeb) {
     databaseFactory = databaseFactoryFfiWeb;
   }
+  await DatabaseHelper.instance.ensureInitialized();
   runApp(const RickMortyFavoritesApp());
 }
 

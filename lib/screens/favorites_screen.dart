@@ -39,18 +39,33 @@ class FavoritesScreenState extends State<FavoritesScreen> {
       _isLoading = true;
     });
 
-    final sortOrder = await widget.preferences.getFavoriteSortOrder();
-    final saved = await widget.database.getAllSavedCharacters(
-      sortOrder: sortOrder,
-    );
+    try {
+      final sortOrder = await widget.preferences.getFavoriteSortOrder();
+      final saved = await widget.database.getAllSavedCharacters(
+        sortOrder: sortOrder,
+      );
 
-    if (!mounted) return;
+      if (!mounted) return;
 
-    setState(() {
-      _sortOrder = sortOrder;
-      _savedCharacters = saved;
-      _isLoading = false;
-    });
+      setState(() {
+        _sortOrder = sortOrder;
+        _savedCharacters = saved;
+        _isLoading = false;
+      });
+    } catch (_) {
+      if (!mounted) return;
+
+      setState(() {
+        _savedCharacters = [];
+        _isLoading = false;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Could not load saved favorites. Pull to refresh.'),
+        ),
+      );
+    }
   }
 
   Future<void> _changeSortOrder(FavoriteSortOrder sortOrder) async {
